@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import * as tf from '@tensorflow/tfjs'
 
 @Component({
   selector: 'app-tab1',
@@ -7,6 +8,14 @@ import { Component } from '@angular/core';
 })
 export class Tab1Page {
 
-  constructor() {}
+  constructor() {
+    this.loadModel()
+  }
+
+  async loadModel() {
+    const MODEL_PATH = 'file://C:/Users/Kesavan Ramalingam/git/tamil-character-recognition-vl2wd3/src/app/models/tamil-char-recognition/model.json'
+    const model = await tf.loadLayersModel(MODEL_PATH);
+    console.log(model.summary());
+  }
 
 }
