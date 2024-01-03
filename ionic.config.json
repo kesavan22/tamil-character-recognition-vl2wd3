@@ -1,0 +1,8 @@
+{
+  "name": "Tamil Character Recognition",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "5620e49a"
+}
