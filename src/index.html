@@ -13,6 +13,7 @@
   <meta name="msapplication-tap-highlight" content="no" />
 
   <link rel="icon" type="image/png" href="assets/icon/favicon.png" />
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"> </script>
 
   <!-- add to homescreen for ios -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -22,5 +23,20 @@
 <body>
   <app-root></app-root>
 </body>
+
+<script>
+  async function run() {
+    console.log("Started")
+    const MODEL_URL = 'http://localhost:8080/output_files/model.json'
+    // const MODEL_URL = 'https://github.com/https-deeplearning-ai/tensorflow-2-public/blob/main/C1_Browser-based-TF-JS/W3/ungraded_labs/output_files/model.json'
+    const model = await tf.loadLayersModel(MODEL_URL);
+    console.log(model.summary());
+    const input = tf.tensor2d([10.0], [1, 1]);
+    const result = model.predict(input);
+    alert(result)
+  }
+  console.log("Started")
+  run();
+</script>
 
 </html>
