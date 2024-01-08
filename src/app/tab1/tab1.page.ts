@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { AlertController } from '@ionic/angular';
+import * as tf from '@tensorflow/tfjs'
 
 
 @Component({
@@ -8,14 +10,35 @@ import { Component } from '@angular/core';
 })
 export class Tab1Page {
 
-  constructor() {
-    // this.loadModel()
+  model:any;
+
+  constructor(
+    private alertController: AlertController
+  ) {
+    this.loadModel();
   }
 
-  // async loadModel() {
-  //   const MODEL_PATH = 'file://C:/Users/Kesavan Ramalingam/git/tamil-character-recognition-vl2wd3/src/app/models/tamil-char-recognition/model.json'
-  //   const model = await tf.loadLayersModel(MODEL_PATH);
-  //   console.log(model.summary());
-  // }
+  async presentAlert(value:any) {
+    const alert = await this.alertController.create({
+      header: value,
+      buttons: ['Okay']
+    });
 
+    await alert.present();
+  }
+
+  async loadModel() {
+    // const modelUrl = 'assets/models/tamil-char-recognition/model.json';
+    const modelUrl = 'assets/models/linear-regression/model.json';
+    try {
+      this.model = await tf.loadLayersModel(modelUrl);
+      console.log('Model loaded successfully');
+      const input = tf.tensor2d([10.0], [1,1]);
+      const result = this.model.predict(input);
+      const predictionsArray = await result.array();
+      this.presentAlert(predictionsArray[0])
+    } catch (error) {
+      console.error('Error loading the model:', error);
+    }
+  }
 }
