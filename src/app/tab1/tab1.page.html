@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 1
+      தமிழ் எழுத்துக்கள்
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,9 +9,18 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
+      <ion-title size="medium">தமிழ் எழுத்துக்கள்</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
-</ion-content> 
+  <div class="canvas-container">
+    <canvas #canvas (touchstart)="startDrawing($event)" (touchmove)="draw($event)" (touchend)="endDrawing($event)"
+      (mousedown)="startDrawing($event)" (mousemove)="draw($event)" (mouseup)="endDrawing($event)" width="300"
+      height="200">
+    </canvas>
+  </div>
+  <div class="ion-text-center">
+    <ion-button shape="round" color="danger" (click)="resetCanvas()">Reset</ion-button>
+    <ion-button shape="round" color="primary" (click)="findOut()">Find out</ion-button>
+  </div>
+</ion-content>
