@@ -37,13 +37,14 @@ export class Tab1Page implements AfterViewInit {
 
   async loadModel() {
     // const modelUrl = 'assets/models/tamil-char-recognition/model.json';
-    const modelUrl = 'assets/models/linear-regression/model.json';
+    // const modelUrl = 'assets/models/linear-regression/model.json';
+    const modelUrl = 'assets/models/aToAku/model.json';
     try {
       this.model = await tf.loadLayersModel(modelUrl);
       console.log('Model loaded successfully');
-      const input = tf.tensor2d([10.0], [1, 1]);
-      const result = this.model.predict(input);
-      const predictionsArray = await result.array();
+      // const input = tf.tensor2d([10.0], [1, 1]);
+      // const result = this.model.predict(input);
+      // const predictionsArray = await result.array();
       // this.presentAlert(predictionsArray[0])
     } catch (error) {
       console.error('Error loading the model:', error);
@@ -86,11 +87,6 @@ export class Tab1Page implements AfterViewInit {
     this.context.clearRect(0, 0, canvas.width, canvas.height);
   }
 
-  // findOut(){
-  //   const canvas = this.canvas.nativeElement;
-  //   const dataUrl = canvas.toDataURL('image/png');
-  //   console.log('Data URL:', dataUrl);
-  // }
 
   findOut() {
     const canvas = this.canvas.nativeElement;
@@ -118,7 +114,7 @@ export class Tab1Page implements AfterViewInit {
 
     // Crop the drawn area
     const croppedCanvas = document.createElement('canvas');
-    const croppedContext :any = croppedCanvas.getContext('2d');
+    const croppedContext: any = croppedCanvas.getContext('2d');
 
     const width = maxX - minX;
     const height = maxY - minY;
@@ -129,6 +125,24 @@ export class Tab1Page implements AfterViewInit {
     croppedContext.drawImage(canvas, minX, minY, width, height, 0, 0, width, height);
 
     const dataUrl = croppedCanvas.toDataURL('image/png');
-    
+
+    const img = new Image();
+
+    img.src = dataUrl;
+
+    img.onload = async () => {
+      const rawTensor = tf.browser.fromPixels(img, 1);
+      var resized = tf.image.resizeBilinear(rawTensor, [28, 28]);
+      const floatPixels = tf.cast(resized, 'float32');
+      const normalizedPixels = tf.div(floatPixels, 255);
+      const { mean, variance } = tf.moments(normalizedPixels);
+      const std = tf.sqrt(variance);
+      const normalizedTensor = tf.div(tf.sub(normalizedPixels, mean), std);
+      var tensor = normalizedTensor.expandDims(0);
+      var prediction = this.model.predict(tensor);
+      const predictedClassIndex = prediction.argMax(1).dataSync()[0];
+      console.log(predictedClassIndex)
+      rawTensor.dispose();
+    };
   }
 }
