@@ -42,7 +42,7 @@ export class Tab1Page implements AfterViewInit {
   }
 
   async loadModel() {
-    const modelUrl = 'assets/models/aToAku/model.json';
+    const modelUrl = 'assets/models/tamil-chars/model.json';
     try {
       this.model = await tf.loadLayersModel(modelUrl);
       console.log('Model loaded successfully');
@@ -128,7 +128,7 @@ export class Tab1Page implements AfterViewInit {
 
     rawImage.onload = async () => {
       const rawTensor = tf.browser.fromPixels(rawImage, 1);
-      var resized = tf.image.resizeBilinear(rawTensor, [28, 28]);
+      var resized = tf.image.resizeBilinear(rawTensor, [64, 100]);
       const floatPixels = tf.cast(resized, 'float32');
       const normalizedPixels = tf.div(floatPixels, 255);
       const { mean, variance } = tf.moments(normalizedPixels);
