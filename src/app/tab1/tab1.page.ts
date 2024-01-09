@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import * as tf from '@tensorflow/tfjs'
+import { DataService } from '../services/data.service';
 
 
 @Component({
@@ -16,8 +17,13 @@ export class Tab1Page implements AfterViewInit {
 
   model: any;
 
+  recognizedChar: any;
+
+  suggestions: any;
+
   constructor(
-    private alertController: AlertController
+    private alertController: AlertController,
+    private dataService: DataService
   ) {
     this.loadModel();
   }
@@ -79,6 +85,7 @@ export class Tab1Page implements AfterViewInit {
   resetCanvas() {
     const canvas = this.canvas.nativeElement;
     this.context.clearRect(0, 0, canvas.width, canvas.height);
+    this.recognizedChar = null;
   }
 
   findOut() {
@@ -130,7 +137,7 @@ export class Tab1Page implements AfterViewInit {
       var tensor = normalizedTensor.expandDims(0);
       var prediction = this.model.predict(tensor);
       const predictedClassIndex = prediction.argMax(1).dataSync()[0];
-      console.log(predictedClassIndex)
+      this.recognizedChar = this.dataService.classArray.find((obj: any) => obj.class === String(predictedClassIndex))?.letter
       rawTensor.dispose();
     };
   }

@@ -19,8 +19,12 @@
       height="200">
     </canvas>
   </div>
-  <div class="ion-text-center">
+  <div class="ion-text-center ion-margin-top">
     <ion-button shape="round" color="danger" (click)="resetCanvas()">Reset</ion-button>
     <ion-button shape="round" color="primary" (click)="findOut()">Find out</ion-button>
+  </div>
+  <div class="ion-text-center ion-margin-top">
+    <div>Recognized as: <span style="font-size: 2em;color: brown;">{{recognizedChar}}</span></div>
+    <!-- <div>If not correct might be: {{suggestions}}</div> -->
   </div>
 </ion-content>
