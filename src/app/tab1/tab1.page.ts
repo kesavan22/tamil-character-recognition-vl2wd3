@@ -101,7 +101,7 @@ export class Tab1Page implements AfterViewInit {
     }
 
     const croppedCanvas = document.createElement('canvas');
-    const croppedContext:any = croppedCanvas.getContext('2d');
+    const croppedContext: any = croppedCanvas.getContext('2d');
 
     croppedCanvas.width = maxX - minX;
     croppedCanvas.height = maxY - minY;
@@ -114,5 +114,24 @@ export class Tab1Page implements AfterViewInit {
     const croppedImageDataUrl = croppedCanvas.toDataURL('image/png');
 
     console.log(croppedImageDataUrl)
+
+    const rawImage = new Image();
+
+    rawImage.src = croppedImageDataUrl;
+
+    rawImage.onload = async () => {
+      const rawTensor = tf.browser.fromPixels(rawImage, 1);
+      var resized = tf.image.resizeBilinear(rawTensor, [28, 28]);
+      const floatPixels = tf.cast(resized, 'float32');
+      const normalizedPixels = tf.div(floatPixels, 255);
+      const { mean, variance } = tf.moments(normalizedPixels);
+      const std = tf.sqrt(variance);
+      const normalizedTensor = tf.div(tf.sub(normalizedPixels, mean), std);
+      var tensor = normalizedTensor.expandDims(0);
+      var prediction = this.model.predict(tensor);
+      const predictedClassIndex = prediction.argMax(1).dataSync()[0];
+      console.log(predictedClassIndex)
+      rawTensor.dispose();
+    };
   }
 }
