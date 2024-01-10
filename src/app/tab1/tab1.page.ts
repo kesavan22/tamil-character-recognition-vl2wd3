@@ -20,7 +20,7 @@ export class Tab1Page implements AfterViewInit {
 
   recognizedChar: any;
 
-  suggestions: any;
+  suggestions: any ='';
 
   selectedLanguage = 'en'
 
@@ -96,9 +96,11 @@ export class Tab1Page implements AfterViewInit {
     const canvas = this.canvas.nativeElement;
     this.context.clearRect(0, 0, canvas.width, canvas.height);
     this.recognizedChar = null;
+    this.suggestions = '';
   }
 
   findOut() {
+    this.suggestions = '';
     const canvas = this.canvas.nativeElement;
     const ctx = this.context
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -146,6 +148,20 @@ export class Tab1Page implements AfterViewInit {
       const normalizedTensor = tf.div(tf.sub(normalizedPixels, mean), std);
       var tensor = normalizedTensor.expandDims(0);
       var prediction = this.model.predict(tensor);
+
+      const topk = tf.topk(prediction, 5);
+      const indices = topk.indices.dataSync();
+
+      for (let i = 0; i < 5; i++) {
+        if(i===0){
+          this.recognizedChar =this.dataService.classArray.find((obj: any) => obj.class === String(indices[i]))?.letter
+        }else{
+          this.suggestions += this.dataService.classArray.find((obj: any) => obj.class === String(indices[i]))?.letter +', '
+        }
+      }
+
+      this.suggestions = this.suggestions.slice(0, -2);
+
       const predictedClassIndex = prediction.argMax(1).dataSync()[0];
       this.recognizedChar = this.dataService.classArray.find((obj: any) => obj.class === String(predictedClassIndex))?.letter
       rawTensor.dispose();
