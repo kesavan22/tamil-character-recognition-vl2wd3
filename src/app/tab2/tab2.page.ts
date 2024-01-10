@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-tab2',
@@ -7,6 +8,14 @@ import { Component } from '@angular/core';
 })
 export class Tab2Page {
 
-  constructor() {}
+  letterList :any = []
+  
+  constructor(private dataService : DataService) {
+    this.genData();
+  }
+
+  genData():void{
+    this.dataService.classArray.forEach((obj:any)=>this.letterList.push(obj.letter))
+  }
 
 }
