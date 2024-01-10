@@ -13,6 +13,18 @@
     </ion-toolbar>
   </ion-header>
 
+  <div>
+    <ion-list>
+      <ion-item>
+        <ion-select placeholder="Select a Language">
+          <div slot="label">Language</div>
+          <ion-select-option value="en">English</ion-select-option>
+          <ion-select-option value="ta">தமிழ்</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+  </div>
+
   <div class="canvas-container">
     <canvas #canvas (touchstart)="startDrawing($event)" (touchmove)="draw($event)" (touchend)="endDrawing($event)"
       (mousedown)="startDrawing($event)" (mousemove)="draw($event)" (mouseup)="endDrawing($event)" width="300"
