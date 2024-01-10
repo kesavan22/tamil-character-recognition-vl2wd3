@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import * as tf from '@tensorflow/tfjs'
 import { DataService } from '../services/data.service';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -21,15 +22,24 @@ export class Tab1Page implements AfterViewInit {
 
   suggestions: any;
 
+  selectedLanguage = 'en'
+
   constructor(
     private alertController: AlertController,
-    private dataService: DataService
+    private dataService: DataService,
+    private translate : TranslateService
   ) {
     this.loadModel();
+    this.translate.setDefaultLang(this.selectedLanguage)
   }
 
   ngAfterViewInit() {
     this.context = this.canvas.nativeElement.getContext('2d');
+  }
+
+  changeLanguage(event:any):void{
+    this.selectedLanguage = event.target.value
+    this.translate.use(this.selectedLanguage)
   }
 
   async presentAlert(value: any) {

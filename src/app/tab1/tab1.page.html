@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      தமிழ் எழுத்துக்கள்
+      {{"app.title"|translate}}
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,15 +9,14 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="medium">தமிழ் எழுத்துக்கள்</ion-title>
+      <ion-title size="medium">{{"app.title"|translate}}</ion-title>
     </ion-toolbar>
-  </ion-header>
-
+  </ion-header> 
   <div>
     <ion-list>
       <ion-item>
-        <ion-select placeholder="Select a Language">
-          <div slot="label">Language</div>
+        <ion-select [(ngModel)]="selectedLanguage" (ionChange)="changeLanguage($event)" placeholder="Select a Language">
+          <div slot="label">{{"app.language"|translate}}</div>
           <ion-select-option value="en">English</ion-select-option>
           <ion-select-option value="ta">தமிழ்</ion-select-option>
         </ion-select>
@@ -32,11 +31,11 @@
     </canvas>
   </div>
   <div class="ion-text-center ion-margin-top">
-    <ion-button shape="round" color="danger" (click)="resetCanvas()">அழி</ion-button>
-    <ion-button shape="round" color="primary" (click)="findOut()">கண்டுபிடி</ion-button>
+    <ion-button shape="round" color="danger" (click)="resetCanvas()">{{"app.reset"|translate}}</ion-button>
+    <ion-button shape="round" color="primary" (click)="findOut()">{{"app.findOut"|translate}}</ion-button>
   </div>
   <div class="ion-text-center ion-margin-top">
-    <div>கண்டுபிடிக்கப்பட்டது: <span style="font-size: 2em;color: brown;">{{recognizedChar}}</span></div>
+    <div>{{"app.finded"|translate}}: <span style="font-size: 2em;color: brown;">{{recognizedChar}}</span></div>
     <!-- <div>If not correct might be: {{suggestions}}</div> -->
   </div>
 </ion-content>

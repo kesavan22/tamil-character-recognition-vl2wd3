@@ -1,0 +1,9 @@
+{
+	"app": {
+		"title": "Tamil Characters",
+		"language" : "Language",
+		"reset":"Reset",
+		"findOut" : "Find Out",
+		"finded" : "Predicted as"
+	}
+}
